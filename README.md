@@ -1,0 +1,2 @@
+# scrap
+A programming language.
