@@ -1,0 +1,141 @@
+[
+    ["COMMENT",
+        ["alt",
+            ["cat",
+                "--",
+                ["star", ["class", "!\n"]],
+                "\n"
+            ],
+            ["cat",
+                "--*",
+                ["star",
+                    ["alt",
+                        ["class", "!*"],
+                        ["cat", "*", ["class", "!-"]],
+                        ["cat", "*-", ["class", "!-"]]
+                    ]
+                ],
+                "*--"
+            ]
+        ]
+    ],
+
+    ["LPAREN", "("],
+    ["RPAREN", ")"],
+    ["LBRACK", "["],
+    ["RBRACK", "]"],
+    ["LBRACE", "{"],
+    ["RBRACE", "}"],
+
+    ["COMMA", ","],
+    ["ASSIGN", "="],
+    ["COLON", ":"],
+    ["QUEST", "?"],
+    ["BANG", "!"],
+    ["DECOR", "@"],
+    ["DOT", "."],
+
+    ["PLUS", "+"],
+    ["MINUS", "-"],
+    ["DSTAR", "**"],
+    ["STAR", "*"],
+    ["DDIV", "//"],
+    ["DIV", "/"],
+    ["MOD", "%"],
+ 
+    ["BITAND", "&"],
+    ["BITOR", "|"],
+    ["BITXOR", "^"],
+    ["BITNOT", "~"],
+    ["SHIFTUR", ">>>"],
+    ["SHIFTAR", ">>"],
+    ["SHIFTL", "<<"],
+
+    ["EQ", "=="],
+    ["NE", "!="],
+    ["LE", "<="],
+    ["LT", "<"],
+    ["GE", ">="],
+    ["GT", ">"],
+
+    ["CAT", ".."],
+
+    ["NAME",
+        ["cat",
+            ["alt", "_", ["class", "alpha"]],
+            ["star", ["class", "name"]]
+        ]
+    ],
+
+    ["HEXLIT",
+        ["cat",
+            "0x",
+            ["plus", ["range", ["0", "9"], ["a", "f"], ["A", "F"]]]
+        ]
+    ],
+
+    ["INTLIT",
+        ["plus", ["class", "digit"]]
+    ],
+    
+    ["FLTLIT",
+        ["cat",
+            ["star", ["class", "digit"]],
+            ".",
+            ["star", ["class", "digit"]]
+        ]
+    ],
+
+    ["STRLIT",
+        ["cat",
+            ["opt",
+                ["cat",
+                    ["alt", "_", ["class", "alpha"]],
+                    ["star", ["class", "name"]]
+                ]
+            ],
+            ["alt",
+                ["cat",
+                    "\"",
+                    ["star",
+                        ["alt", ["class", "!\"\n"], "\\\"", "\\\n"]
+                    ],
+                    "\""
+                ],
+                ["cat",
+                    "'",
+                    ["star",
+                        ["alt", ["class", "!'\n"], "\\'", "\\\n"]
+                    ],
+                    "'"
+                ],
+                ["cat",
+                    "'''",
+                    ["star",
+                        ["alt", 
+                            ["class", "!'"],
+                            "\\'",
+                            ["cat", "'", ["class", "!'"]],
+                            ["cat", "''", ["class", "!'"]]
+                        ]
+                    ],
+                    "'''"
+                ],
+                ["cat",
+                    "\"\"\"",
+                    ["star",
+                        ["alt",
+                            ["class", "!\""],
+                            "\\\"",
+                            ["cat", "\"", ["class", "!\""]],
+                            ["cat", "\"\"", ["class", "!\""]]
+                        ]
+                    ],
+                    "\"\"\""
+                ]
+            ]
+        ]
+    ],
+
+    ["WHITE", ["plus", ["class", "space"]]]
+]
