@@ -1,0 +1,153 @@
+[
+    ["module", ["stats"]],
+
+    ["stats", [], ["stat", "stats"]],
+    ["stat",
+        ["DECOR", "expr", "stat"],
+        ["expr", "assign_tail"],
+        ["IF", "expr", "block", "tailstat"],
+        ["FOR", "expr", "IN", "expr", "block", "tailstat"],
+        ["WHILE", "expr", "block", "tailstat"],
+        ["BREAK"],
+        ["CONTINUE"],
+        ["IMPORT", "expr"],
+        ["ASSERT", "expr"],
+        ["PRAGMA", "expr"],
+        ["RETURN", "return_tail"],
+        ["TRY", "block"]
+    ],
+
+    ["tailstat",
+        ["DECOR", "expr", "tailstat"],
+        ["ELIF", "expr", "block", "tailstat"],
+        ["ELSE", "expr", "block", "tailstat"],
+        ["EXCEPT", "expr", "block", "tailstat"]
+    ],
+
+    ["assign_tail", [], ["ASSIGN", "expr"]],
+    ["return_tail", [], ["expr"]],
+
+    ["block", ["LBRACK", "stats", "RBRACK"]],
+
+    ["expr", ["expr_comma"]],
+
+    ["expr_comma", ["expr_quest", "expr_comma_tail"]],
+    ["expr_comma_tail", [], ["COMMA", "expr_quest", "expr_comma_tail"]],
+
+    ["expr_quest", ["expr_boolean", "expr_quest_tail"]],
+    ["expr_quest_tail", [], ["QUEST", "expr_boolean", "BANG", "expr_boolean"]],
+
+    ["expr_boolean", ["expr_or"]],
+
+    ["expr_or", ["expr_xor", "expr_or_tail"]],
+    ["expr_or_tail", [], ["OR", "expr_xor", "expr_or_tail"]],
+
+    ["expr_xor", ["expr_and", "expr_xor_tail"]],
+    ["expr_xor_tail", [], ["XOR", "expr_and", "expr_xor_tail"]],
+
+    ["expr_and", ["expr_not", "expr_and_tail"]],
+    ["expr_and_tail",
+        [],
+        ["AND", "expr_not", "expr_and_tail"],
+        ["NOT", "expr_cmp", "expr_and_tail"]
+    ],
+
+    ["expr_not", ["expr_cmp"], ["NOT", "expr_cmp"]],
+
+    ["expr_cmp", ["expr_bitwise", "expr_cmp_tail"]],
+    ["expr_cmp_tail",
+        [],
+        ["EQ", "expr_bitwise"],
+        ["NE", "expr_bitwise"],
+        ["LT", "expr_bitwise"],
+        ["LE", "expr_bitwise"],
+        ["GT", "expr_bitwise"],
+        ["GE", "expr_bitwise"],
+        ["IN", "expr_bitwise"]
+    ],
+
+    ["expr_bitwise", ["expr_bitor"]],
+
+    ["expr_bitor", ["expr_bitxor", "expr_bitor_tail"]],
+    ["expr_bitor_tail", [], ["BITOR", "expr_bitxor", "expr_bitor_tail"]],
+
+    ["expr_bitxor", ["expr_bitand", "expr_bitxor_tail"]],
+    ["expr_bitxor_tail", [], ["BITXOR", "expr_bitand", "expr_bitxor_tail"]],
+    
+    ["expr_bitand", ["expr_bitnot", "expr_bitand_tail"]],
+    ["expr_bitand_tail",
+        [],
+        ["BITAND", "expr_bitnot", "expr_bitand_tail"],
+        ["BITNOT", "expr_bitshift", "expr_bitand_tail"]
+    ],
+
+    ["expr_bitnot", ["expr_bitshift"], ["BITNOT", "expr_bitshift"]],
+
+    ["expr_bitshift", ["expr_cat", "expr_bitshift_tail"]],
+    ["expr_bitshift_tail",
+        [],
+        ["SHIFTR", "expr_cat"],
+        ["SHIFTL", "expr_cat"]
+    ],
+
+    ["expr_cat", ["expr_arith", "expr_cat_tail"]],
+    ["expr_cat_tail", [], ["CAT", "expr_cat_tail"]],
+
+    ["expr_arith", ["expr_add"]],
+
+    ["expr_add", ["expr_muldiv", "expr_add_tail"]],
+    ["expr_add_tail",
+        [],
+        ["PLUS", "expr_add_tail"],
+        ["MINUS", "expr_add_tail"]
+    ],
+
+    ["expr_muldiv", ["expr_pow", "expr_muldiv_tail"]],
+    ["expr_muldiv_tail",
+        [],
+        ["STAR", "expr_muldiv_tail"],
+        ["DIV", "expr_muldiv_tail"],
+        ["IDIV", "expr_muldiv_tail"],
+        ["MOD", "expr_muldiv_tail"]
+    ],
+
+    ["expr_pow", ["expr_neg", "expr_pow_tail"]],
+    ["expr_pow_tail", [], ["DSTAR", "expr_pow_tail"]],
+
+    ["expr_neg", ["expr_call"], ["MINUS", "expr_call"], ["PLUS", "expr_call"]],
+
+    ["expr_call", ["expr_attr", "expr_call_tail"]],
+    ["expr_call_tail", [], ["LPAREN", "args", "RPAREN"]],
+
+    ["expr_attr", ["expr_item", "expr_attr_tail"]],
+    ["expr_attr_tail", [], ["DOT", "expr_attr_tail2"]],
+    ["expr_attr_tail2", ["NAME"], ["LBRACK", "expr", "RBRACK"]],
+
+    ["expr_item", ["expr_lit", "expr_item_tail"]],
+    ["expr_item_tail", [], ["LBRACK", "expr", "RBRACK"]],
+
+    ["expr_lit",
+        ["NAME"],
+        ["DOT", "NAME"],
+        ["STRING"],
+        ["NUMBER"],
+        ["TRUE"],
+        ["FALSE"],
+        ["LBRACK", "args", "RPAREN"],
+        ["LPAREN", "args", "RPAREN"],
+        ["LBRACE", "args", "RBRACE"]
+    ],
+
+    ["args", [], ["arg", "args_tail"]],
+    ["arg",
+        ["expr", "arg_tail"],
+        ["STAR", "expr", "arg_tail"],
+        ["DSTAR", "expr", "arg_tail"]
+    ],
+    ["args_tail", [], ["COMMA", "arg", "args_tail"]],
+    ["arg_tail",
+        [],
+        ["ASSIGN", "expr", "arg_tail"],
+        ["COLON", "expr", "arg_tail"]
+    ]
+]

@@ -47,8 +47,7 @@
     ["BITOR", "|"],
     ["BITXOR", "^"],
     ["BITNOT", "~"],
-    ["SHIFTUR", ">>>"],
-    ["SHIFTAR", ">>"],
+    ["SHIFTR", ">>"],
     ["SHIFTL", "<<"],
 
     ["EQ", "=="],
