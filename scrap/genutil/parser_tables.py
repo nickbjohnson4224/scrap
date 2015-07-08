@@ -22,8 +22,8 @@ def compile_parserdef(path):
     start = rules[0][0]
 
     # style check (case rules for terminals/nonterminals)
-    assert all(t.isupper() for t in terminals)
-    assert all(nt.islower() for nt in nonterminals)
+    assert all(t.isupper() for t in terminals), 'found lowercase terminal'
+    assert all(nt.islower() for nt in nonterminals), 'found uppercase nonterminal'
 
     # compute first and follow sets
     first = defaultdict(set)
@@ -38,25 +38,19 @@ def compile_parserdef(path):
         dirty = False
 
         for left, right in rules:
-            # X -> Y[0] Y[1] ...
-
             if all(y in nullable for y in right):
                 if left not in nullable:
                     dirty = True
                 nullable.add(left)
-            
             for i in xrange(len(right)):
-
                 if all(right[k] in nullable for k in xrange(i)):
                     if first[right[i]] - first[left]:
                         dirty = True
                     first[left] |= first[right[i]]
-
                 if all(right[k] in nullable for k in xrange(i+1, len(right))):
                     if follow[left] - follow[right[i]]:
                         dirty = True
                     follow[right[i]] |= follow[left]
-
                 for j in xrange(i+1, len(right)):
                     if all(right[k] in nullable for k in xrange(i+1, j)):
                         if first[right[j]] - follow[right[i]]:
@@ -64,27 +58,45 @@ def compile_parserdef(path):
                         follow[right[i]] |= first[right[j]]
 
     # sanity check (no nonterminals in first/follow)
-    assert not any((first[s] | follow[s]) & nonterminals for s in symbols)
+    assert not any((first[s] | follow[s]) & nonterminals for s in symbols),\
+        'nonterminal found in first or follow set'
 
-    print 'rules:',
+    # create first sets for all right hand sides of rules
     for left, right in rules:
-        print '\t', left, '->', ' '.join(right)
-    print ''
+        for i, s in enumerate(right):
+            first[right] |= first[right[0]]
+            if s not in nullable:
+                break
 
-    print 'first:'
-    for nt in sorted(nonterminals):
-        print '\t', nt, ':', ' '.join(first[nt])
-    print ''
+    for nt in nonterminals:
+        print nt
+        print first[nt]
+        print follow[nt]
 
-    print 'follow:'
-    for nt in sorted(nonterminals):
-        print '\t', nt, ':', ' '.join(follow[nt])
-    print ''
+    table = {}
+    for nt in nonterminals:
+        for t in terminals:
+            if t not in first[nt]:
+                continue
 
-    return
+            already_set = False
+            for left, right in rules:
+                if left != nt:
+                    break
+                if right and t in first[right]:
+                    table[nt, t] = right
+                    already_set = True
+                elif not right and t in follow[nt]:
+                    table[nt, t] = right
+                    already_set = True
+                else:
+                    assert already_set, 'ambiguous rule for %r %r' % (nt, t)
+
+    return table
 
 def main(parserdef_path, output_path=None):
-    compile_parserdef(parserdef_path)
+    ll1_table = compile_parserdef(parserdef_path)
+    print ll1_table
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
