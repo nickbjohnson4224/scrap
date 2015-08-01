@@ -8,7 +8,7 @@ LIBDIR := lib
 SUBDIRS := $(patsubst $(SRCDIR)/%,%,$(shell find $(SRCDIR) -mindepth 1 -type d))
 OBJDIRS := $(OBJDIR) $(addprefix $(OBJDIR)/,$(SUBDIRS))
 
-SRCFILES += $(shell find $(SRCDIR) -type f -name "*.cpp")
+SRCFILES += $(shell find $(SRCDIR) -type f -name "*.cc")
 HDRFILES := $(shell find $(SRCDIR) -type f -name "*.h")
 OBJFILES := $(patsubst $(SRCDIR)%,$(OBJDIR)%.o,$(basename $(SRCFILES)))
 BINFILES := $(BINDIR)/scrc
