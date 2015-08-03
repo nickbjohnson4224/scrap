@@ -31,7 +31,7 @@ $(BINDIR):
 $(BINDIR)/scrc: $(OBJFILES)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJFILES)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HDRFILES)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cc $(HDRFILES)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<	
 
 clean:
